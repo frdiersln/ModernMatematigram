@@ -90,7 +90,9 @@ export default function App() {
               >
                 
                 <Animated.View>
+                  <Text style={[styles.node, styles.nodeH2]}> &nbsp; </Text>
                   <Text style={[styles.node, styles.nodeH1]}>MONOİD</Text>
+                  <Text style={[styles.node, styles.nodeH2]}>Monoid Aksiyom 1</Text>
                 </Animated.View>
                 <Animated.View>
                   <Text style={[styles.node, styles.nodeH1]}>YARI GRUP</Text>
@@ -127,13 +129,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,  },
+    padding: 10,
+  },
   node: {
-    margin: 66,
+    marginHorizontal: 89,
+    marginVertical: 4,
     color: 'white',
   },
   nodeH1: {
-    fontSize: 30,
+    marginVertical: 14,
+    fontSize: 41,
     fontWeight: 'bold',
+  },
+  nodeH2: {
+    marginVertical: 2,
+    fontSize: 22,
+    fontWeight: 'semi-bold',
   },
 });
