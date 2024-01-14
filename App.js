@@ -1,6 +1,6 @@
 import React from 'react';
 import { Animated, StyleSheet, View, Text } from 'react-native';
-import { PanGestureHandler, State } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, PanGestureHandler, State } from 'react-native-gesture-handler';
 
 export default function App() {
   const translateX = new Animated.Value(0);
@@ -32,26 +32,44 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
-      <PanGestureHandler
-        onGestureEvent={onGestureEvent}
-        onHandlerStateChange={onHandlerStateChange}
-      >
-        <Animated.View
-          style={[
-            styles.box,
-            {
-              transform: [
-                { translateX: translateX },
-                { translateY: translateY },
-              ],
-            },
-          ]}
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <PanGestureHandler
+          onGestureEvent={onGestureEvent}
+          onHandlerStateChange={onHandlerStateChange}
         >
-          <Text style={{ color: 'white', fontSize: 20 }}>Hello, World!</Text>
-        </Animated.View>
-      </PanGestureHandler>
-    </View>
+          <Animated.View
+            style={[
+              styles.draggableArea,
+              {
+                transform: [
+                  { translateX: translateX },
+                  { translateY: translateY },
+                ],
+              },
+            ]}
+          >
+            
+            <Animated.View>
+              <Text style={[styles.node, styles.nodeH1]}>Drag me</Text>
+            </Animated.View>
+            <Animated.View>
+              <Text style={[styles.node, styles.nodeH1]}>Drag us</Text>
+            </Animated.View>
+            <Animated.View>
+              <Text style={[styles.node, styles.nodeH1]}>GRUP</Text>
+            </Animated.View>
+            <Animated.View>
+              <Text style={[styles.node, styles.nodeH1]}>HALKA</Text>
+            </Animated.View>
+            <Animated.View>
+              <Text style={[styles.node, styles.nodeH1]}>MODÜL</Text>
+            </Animated.View>
+
+          </Animated.View>
+        </PanGestureHandler>
+      </View>
+    </GestureHandlerRootView>
   );
 }
 
@@ -60,10 +78,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'tomato',
   },
-  box: {
-    width: 100,
-    height: 100,
-    backgroundColor: 'red',
+  draggableArea: {
+    alignSelf: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,  },
+  node: {
+    margin: 66,
+    color: 'white',
+  },
+  nodeH1: {
+    fontSize: 30,
+    fontWeight: 'bold',
   },
 });
