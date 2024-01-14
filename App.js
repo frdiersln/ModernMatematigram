@@ -17,7 +17,7 @@ export default function App() {
         },
       },
     ],
-    { useNativeDriver: true }
+    { useNativeDriver: false }
   );
 
   const onHandlerStateChange = event => {
