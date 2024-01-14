@@ -1,12 +1,14 @@
 import React from 'react';
 import { Animated, StyleSheet, View, Text } from 'react-native';
-import { GestureHandlerRootView, PanGestureHandler, State } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, PinchGestureHandler, PanGestureHandler, TapGestureHandler, State } from 'react-native-gesture-handler';
 
 export default function App() {
   const translateX = new Animated.Value(0);
   const translateY = new Animated.Value(0);
   const lastTranslateX = new Animated.Value(0);
   const lastTranslateY = new Animated.Value(0);
+  const scale = new Animated.Value(1);
+  const lastScale = new Animated.Value(1);
 
   const onGestureEvent = Animated.event(
     [
@@ -31,6 +33,37 @@ export default function App() {
     }
   };
 
+  const onPinchGestureEvent = Animated.event(
+    [
+      {
+        nativeEvent: {
+          scale: scale,
+        },
+      },
+    ],
+    { useNativeDriver: false }
+  );
+
+  const onPinchHandlerStateChange = event => {
+    if (event.nativeEvent.oldState === State.ACTIVE) {
+      lastScale.setValue(lastScale._value * event.nativeEvent.scale);
+      scale.setValue(lastScale._value);
+    }
+  };
+
+  const onDoubleTap = ({ nativeEvent }) => {
+    if (nativeEvent.state === State.ACTIVE) {
+      if (scale._value === 1) {
+        scale.setValue(2);
+        lastScale.setValue(1);
+      }
+      else {
+        scale.setValue(1);
+        lastScale.setValue(1);
+      }
+    }
+  };
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -38,35 +71,43 @@ export default function App() {
           onGestureEvent={onGestureEvent}
           onHandlerStateChange={onHandlerStateChange}
         >
-          <Animated.View
-            style={[
-              styles.draggableArea,
-              {
-                transform: [
-                  { translateX: translateX },
-                  { translateY: translateY },
-                ],
-              },
-            ]}
+          <PinchGestureHandler
+            onGestureEvent={onPinchGestureEvent}
+            onHandlerStateChange={onPinchHandlerStateChange}
           >
-            
-            <Animated.View>
-              <Text style={[styles.node, styles.nodeH1]}>Drag me</Text>
-            </Animated.View>
-            <Animated.View>
-              <Text style={[styles.node, styles.nodeH1]}>Drag us</Text>
-            </Animated.View>
-            <Animated.View>
-              <Text style={[styles.node, styles.nodeH1]}>GRUP</Text>
-            </Animated.View>
-            <Animated.View>
-              <Text style={[styles.node, styles.nodeH1]}>HALKA</Text>
-            </Animated.View>
-            <Animated.View>
-              <Text style={[styles.node, styles.nodeH1]}>MODÜL</Text>
-            </Animated.View>
+            <TapGestureHandler onHandlerStateChange={onDoubleTap} numberOfTaps={2}>
+              <Animated.View
+                style={[
+                  styles.draggableArea,
+                  {
+                    transform: [
+                      { translateX: translateX },
+                      { translateY: translateY },
+                      { scale: scale },
+                    ],
+                  },
+                ]}
+              >
+                
+                <Animated.View>
+                  <Text style={[styles.node, styles.nodeH1]}>MONOİD</Text>
+                </Animated.View>
+                <Animated.View>
+                  <Text style={[styles.node, styles.nodeH1]}>YARI GRUP</Text>
+                </Animated.View>
+                <Animated.View>
+                  <Text style={[styles.node, styles.nodeH1]}>GRUP</Text>
+                </Animated.View>
+                <Animated.View>
+                  <Text style={[styles.node, styles.nodeH1]}>HALKA</Text>
+                </Animated.View>
+                <Animated.View>
+                  <Text style={[styles.node, styles.nodeH1]}>MODÜL</Text>
+                </Animated.View>
 
-          </Animated.View>
+              </Animated.View>
+            </TapGestureHandler>
+          </PinchGestureHandler>
         </PanGestureHandler>
       </View>
     </GestureHandlerRootView>
